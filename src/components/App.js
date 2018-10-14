@@ -394,7 +394,8 @@ class App extends Component {
         this.openDrawer(null)
     }
 
-    getCurrentTimeAsFileName(winner) {
+    getCurrentTimeAsFileName(signer) {
+        let winner = signer === 'B' ? 'W':'B'
         return new Date().getTime().toString().concat('w:').concat(winner.toString()).concat('.sgf')
     }
 
@@ -2236,8 +2237,6 @@ class App extends Component {
 
     async reStartGame() {
 
-        // this.setMode('play')
-
         await this.waitForRender()
         let enginees = this.getCurrentEnginnes()
         this.detachEngines()
@@ -2262,32 +2261,9 @@ class App extends Component {
 
 
         await this.waitForRender()
-        // let [tree, index] = this.props.treePosition
-        // let emptyTree = !tree.parent && tree.nodes.length === 1 && tree.subtrees.length === 0
-
-        // let keys = ['blackName', 'blackRank', 'whiteName', 'whiteRank',
-        //     'gameName', 'eventName', 'date', 'result', 'komi']
-        //
-        // let data = keys.reduce((acc, key) => {
-        //     acc[key] = Array.isArray(this.state[key])
-        //     && this.state[key].every(x => x == null) ? null : this.state[key]
-        //     return acc
-        // }, {})
-
-        // if (emptyTree) {
-        //     data.handicap = this.state.handicap
-        //     data.size = this.state.size
-        // }
-
-        // this.setGameInfo(this.props.treePosition[0], data)
-        // let engines = [...this.state.engines]
         this.attachEngines(...enginees)
 
-        // let startGame = setting.get('gtp.start_game_after_attach')
-
-        // if (startGame) {
         this.generateMove({followUp: true})
-        // }
     }
 
     async generateMove({passPlayer = null, firstMove = true, followUp = false} = {}) {
@@ -2341,7 +2317,7 @@ class App extends Component {
         }
 
         if (response.content.toLowerCase() === 'resign') {
-        // if (this.getMoveTimes() === 10) {
+            // if (this.getMoveTimes() === 10) {
             // 自动保存棋谱
             console.log(`${playerController.engine.name} has resigned.`)
             // dialog.showMessageBox(`${playerController.engine.name} has resigned.`)
@@ -2356,9 +2332,9 @@ class App extends Component {
             fs.writeFileSync(filename, this.getSGF())
 
 
-            setTimeout(this.reStartGame(),5000)
+            setTimeout(this.reStartGame(), 5000)
 
-        }else{
+        } else {
             let previousNode = this.state.treePosition[0].nodes[this.state.treePosition[1]]
             let previousPass = ['W', 'B'].some(color => color in previousNode
                 && !board.hasVertex(sgf.parseVertex(previousNode[color][0])))
