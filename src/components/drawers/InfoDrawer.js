@@ -38,7 +38,7 @@ class InfoDrawer extends Component {
 
             let data = keys.reduce((acc, key) => {
                 acc[key] = Array.isArray(this.state[key])
-                    && this.state[key].every(x => x == null) ? null : this.state[key]
+                && this.state[key].every(x => x == null) ? null : this.state[key]
                 return acc
             }, {})
 
@@ -80,12 +80,20 @@ class InfoDrawer extends Component {
             }))
         }
 
+        // this.handleSelectSaveFilepath = evt => {
+        //     dialog.showSaveDialog({
+        //         filters: [fileformats.sgf.meta, {name: 'All Files', extensions: ['*']}]
+        //     }, ({result}) => {
+        //         this.setState()
+        //     })
+        // }
+
         this.handleBoardHeightChange = evt => {
             let {value} = evt.currentTarget
             if (value === '' || isNaN(value)) value = null
             else value = +value
 
-            this.setState(({size: [width, ]}) => ({size: [width, value]}))
+            this.setState(({size: [width,]}) => ({size: [width, value]}))
         }
 
         this.handleSizeSwapButtonClick = () => {
@@ -293,9 +301,9 @@ class InfoDrawer extends Component {
         document.body.appendChild(this.pikaday.el)
         document.body.addEventListener('click', evt => {
             if (this.pikaday.isVisible()
-            && document.activeElement !== this.dateInputElement
-            && evt.target !== this.dateInputElement
-            && !this.elementInPikaday(evt.target))
+                && document.activeElement !== this.dateInputElement
+                && evt.target !== this.dateInputElement
+                && !this.elementInPikaday(evt.target))
                 this.pikaday.hide()
         })
 
@@ -303,24 +311,24 @@ class InfoDrawer extends Component {
     }
 
     render({
-        treePosition,
-        currentPlayer,
-        show
-    }, {
-        showResult = false,
-        engines = [null, null],
-        blackName = null,
-        blackRank = null,
-        whiteName = null,
-        whiteRank = null,
-        gameName = null,
-        eventName = null,
-        date = null,
-        result = null,
-        komi = null,
-        handicap = 0,
-        size = [null, null]
-    }) {
+               treePosition,
+               currentPlayer,
+               show
+           }, {
+               showResult = false,
+               engines = [null, null],
+               blackName = null,
+               blackRank = null,
+               whiteName = null,
+               whiteRank = null,
+               gameName = null,
+               eventName = null,
+               date = null,
+               result = null,
+               komi = null,
+               handicap = 0,
+               size = [null, null]
+           }) {
         let [tree, index] = treePosition
         let emptyTree = !tree.parent && tree.nodes.length === 1 && tree.subtrees.length === 0
 
@@ -434,16 +442,16 @@ class InfoDrawer extends Component {
                     ),
                     h(InfoDrawerItem, {title: 'Result'},
                         showResult
-                        ? h('input', {
-                            type: 'text',
-                            placeholder: 'None',
-                            value: result,
-                            onInput: this.handleInputChange.result
-                        })
-                        : h('button', {
-                            type: 'button',
-                            onClick: this.handleShowResultClick
-                        }, 'Show')
+                            ? h('input', {
+                                type: 'text',
+                                placeholder: 'None',
+                                value: result,
+                                onInput: this.handleInputChange.result
+                            })
+                            : h('button', {
+                                type: 'button',
+                                onClick: this.handleShowResultClick
+                            }, 'Show')
                     ),
                     h(InfoDrawerItem, {title: 'Handicap'},
                         h('select',
@@ -474,7 +482,7 @@ class InfoDrawer extends Component {
 
                         h('span', {
                             title: 'Swap',
-                            style: {cursor: emptyTree ? 'pointer': 'default'},
+                            style: {cursor: emptyTree ? 'pointer' : 'default'},
                             onClick: !emptyTree ? helper.noop : this.handleSizeSwapButtonClick
                         }, '×'), ' ',
 
@@ -488,9 +496,25 @@ class InfoDrawer extends Component {
                             disabled: !emptyTree,
                             onInput: this.handleBoardHeightChange
                         })
-                    )
+                    ),
+                    // h(InfoDrawerItem, {title: 'save path'},
+                    //     h('input', {
+                    //         type: 'number',
+                    //         name: 'size-width',
+                    //         placeholder: 19,
+                    //         max: 25,
+                    //         min: 2,
+                    //         value: size[0],
+                    //         disabled: !emptyTree,
+                    //     }), ' ',
+                    //
+                    //     h('button', {
+                    //         type: 'button',
+                    //         onClick: this.handleSelectSaveFilepath
+                    //     }, 'select file')
+                    //
+                    // )
                 ),
-
                 h('p', {},
                     h('button', {type: 'submit', onClick: this.handleSubmitButtonClick}, 'OK'), ' ',
                     h('button', {type: 'reset', onClick: this.handleCancelButtonClick}, 'Cancel')

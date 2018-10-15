@@ -395,8 +395,7 @@ class App extends Component {
     }
 
     getCurrentTimeAsFileName(signer) {
-        let winner = signer === 'B' ? 'W':'B'
-        return new Date().getTime().toString().concat('w:').concat(winner.toString()).concat('.sgf')
+        return new Date().getTime().toString().concat('l:').concat(signer.toString()).concat('.sgf')
     }
 
     increaseMoveTimes() {
@@ -2327,14 +2326,16 @@ class App extends Component {
             this.makeResign()
             this.setBusy(false)
 
-            let filename = this.getCurrentTimeAsFileName(color)
+            let filename = this.getCurrentTimeAsFileName(color.concat(playerController.engine.name))
             // auto save
             fs.writeFileSync(filename, this.getSGF())
-
 
             setTimeout(this.reStartGame(), 5000)
 
         } else {
+
+            console.log(this.state.gameTrees)
+
             let previousNode = this.state.treePosition[0].nodes[this.state.treePosition[1]]
             let previousPass = ['W', 'B'].some(color => color in previousNode
                 && !board.hasVertex(sgf.parseVertex(previousNode[color][0])))
